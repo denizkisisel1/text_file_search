@@ -56,7 +56,6 @@ public:
         QPushButton *searchReplaceButton = new QPushButton("Search/Replace");
         layout->addWidget(searchReplaceButton);
 
-        // Connect button click to slot
         connect(searchReplaceButton, &QPushButton::clicked, this, [=]() {
             QString filename = filenameLineEdit->text();
             QString search = searchLineEdit->text();
@@ -64,24 +63,15 @@ public:
             bool caseSensitive = caseSensitiveCheckBox->isChecked();
             bool countOccurrences = countOccurrencesCheckBox->isChecked();
 
-            // Your search and replace logic here
-            // You can use QFile and QTextStream for file I/O
-
-            // Example:
             QFile file(filename);
             if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 QTextStream in(&file);
                 QString fileContents = in.readAll();
 
-                // Perform search and replace operations on fileContents
-                // ...
-
                 file.close();
 
-                // Display results or show a message box
                 QMessageBox::information(this, "Search/Replace Result", "Search and replace completed.");
 
-                // Insert data into MySQL
                 try {
                     sql::mysql::MySQL_Driver *driver;
                     sql::Connection *con;
@@ -92,7 +82,6 @@ public:
                     sql::Statement *stmt;
                     stmt = con->createStatement();
 
-                    // Insert data into a table
                     std::string insertQuery = "INSERT INTO your_table (filename, search, replace) VALUES (?, ?, ?)";
                     sql::PreparedStatement *pstmt = con->prepareStatement(insertQuery);
                     pstmt->setString(1, filename.toStdString());
